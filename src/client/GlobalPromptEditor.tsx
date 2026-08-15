@@ -1,9 +1,12 @@
 /**
  * 全局指令设置页编辑器 (seam 2): 一个自包含的编辑器组件。
- * 通过注入的 `api` 读写用户全局指令文件; 不依赖任何 @deepseek-ai 运行时模块
- * (client bundle 纯度门禁), 仅使用 React。
+ * 通过注入的 `api` 读写用户全局指令文件。视觉遵循设置面板设计语言:
+ * 14/22 正文、12/18 说明文字、胶囊按钮、`border-l2` 细线, 颜色只经
+ * `--dsw-alias-*` token (随明暗主题)。
  */
 import { useCallback, useEffect, useState } from 'react'
+import { Button } from '@deepseek-ai/dsh-client-ui-primitives'
+import css from './GlobalPromptEditor.module.css'
 
 /** One load of the user-global instructions file. */
 export interface GlobalPromptLoadResult {
@@ -84,39 +87,59 @@ export function GlobalPromptEditor({ api }: GlobalPromptEditorProps) {
   }
 
   if (phase === 'loading') {
-    return <div role="status">加载中…</div>
+    return (
+      <div className={css.section}>
+        <p role="status" className={css.intro}>加载中…</p>
+      </div>
+    )
   }
 
   if (phase === 'failed') {
     return (
-      <div role="alert">
-        <p>加载失败: {loadError}</p>
-        <button type="button" onClick={() => { void load() }}>重试</button>
+      <div className={css.section}>
+        <div role="alert">
+          <p className={css.error}>加载失败: {loadError}</p>
+        </div>
+        <div className={css.actions}>
+          <Button variant="outline" onClick={() => { void load() }}>重试</Button>
+        </div>
       </div>
     )
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: 16 }}>
-      <p style={{ margin: 0 }}>{displayPath}</p>
-      {!fileExists && <p style={{ margin: 0 }}>文件不存在, 保存时将创建</p>}
-      <textarea
-        aria-label="全局指令内容"
-        value={draft}
-        onChange={(event) => {
-          setDraft(event.target.value)
-          setSaved(false)
-        }}
-        rows={16}
-        style={{ width: '100%', boxSizing: 'border-box', resize: 'vertical' }}
-      />
-      <p style={{ margin: 0 }}>字符数: {draft.length}</p>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <button type="button" disabled={!dirty || saving} onClick={() => { void handleSave() }}>
-          {saving ? '保存中…' : '保存'}
-        </button>
-        {saved && <span role="status">已保存</span>}
-        {saveError !== '' && <span role="alert">保存失败: {saveError}</span>}
+    <div className={css.section}>
+      <div>
+        <h1 className={css.title}>全局指令</h1>
+        <p className={css.intro}>编辑所有会话共享的全局指令文件。新会话立即生效; 已打开会话在其下一次文件操作时刷新。</p>
+      </div>
+      <div className={css.card}>
+        <div className={css.editorHead}>
+          <span className={css.editorName}>AGENTS.md</span>
+          <span className={css.editorPath}>{displayPath}</span>
+        </div>
+        {!fileExists && <p className={css.notice}>文件不存在, 保存时将创建</p>}
+        <textarea
+          className={css.editor}
+          aria-label="全局指令内容"
+          value={draft}
+          onChange={(event) => {
+            setDraft(event.target.value)
+            setSaved(false)
+          }}
+          placeholder="输入适用于所有会话的全局指令, 例如编码规范、回复语言要求…"
+        />
+        <div className={css.meta}>
+          <span>字符数: {draft.length}</span>
+          {dirty && <span className={css.dirtyHint}>有未保存修改</span>}
+        </div>
+        <div className={css.actions}>
+          <Button variant="primary" disabled={!dirty || saving} onClick={() => { void handleSave() }}>
+            {saving ? '保存中…' : '保存'}
+          </Button>
+          {saved && <span role="status" className={css.saved}>已保存</span>}
+          {saveError !== '' && <span role="alert" className={css.error}>保存失败: {saveError}</span>}
+        </div>
       </div>
     </div>
   )
