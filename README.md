@@ -2,6 +2,8 @@
 
 一个 DeepSeek Harness 可安装插件: 在 Web 设置界面直接编辑**用户全局指令文件** (`$DSH_HOME/AGENTS.md`), 不必再手动打开 `.dsh` 目录修改 AGENTS.md。
 
+![alt text](assets/global-prompt-settings-page.png)
+
 ## 行为
 
 - 设置对话框新增一个 **全局指令** 分区页: 多行编辑器 + 保存按钮 + 文件路径显示 + 字符数统计。
