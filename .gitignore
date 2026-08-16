@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output (regenerate with `pnpm build`)
+lib/
+
+# TypeScript
+*.tsbuildinfo
+
+# Tests
+coverage/
+
+# Logs
+pnpm-debug.log*
+*.log
+
+# Packed bundle tarballs (`pnpm pack`)
+*.tgz
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Scratch
+tmp/

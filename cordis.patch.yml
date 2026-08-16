@@ -1,0 +1,7 @@
+# dsh-global-prompt bundle layer: one plugin row. The host half (package main)
+# reads and writes the user-global instructions file; the client half
+# (package.json `dsh.client`, served as /plugins/global-prompt/client.js)
+# registers the 全局指令 settings section.
+- insert:
+    - id: global-prompt
+      name: dsh-global-prompt
