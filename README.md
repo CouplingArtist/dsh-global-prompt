@@ -25,6 +25,16 @@ dsh web
 
 打开 `http://127.0.0.1:3080` → 设置 → 全局指令。
 
+## 卸载
+
+```powershell
+# 在 dsh CLI 所在环境 (仓库检出目录可用 pnpm dsh)
+dsh plugin --profile web remove dsh-global-prompt
+
+# 重启 dsh web 使卸载插件生效
+dsh web
+```
+
 ## 开发
 
 ```powershell
